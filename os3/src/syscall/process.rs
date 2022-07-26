@@ -1,5 +1,5 @@
 use crate::config::{MAX_APP_NUM, MAX_SYSCALL_NUM};
-use crate::task::{exit_current_and_run_next, suspend_current_and_run_next};
+use crate::task::{exit_current_and_run_next, suspend_current_and_run_next, get_current_status, get_current_start_time};
 use crate::timer::get_time_us;
 use crate::task::task::TaskStatus;
 use crate::task::{get_already_run_time,get_syscall_times};
@@ -26,12 +26,13 @@ pub fn sys_get_time(ts:*mut TimeVal, _tv:usize) ->isize{
 }
 
 pub fn sys_task_info(ti: *mut TaskInfo) -> isize {
-    unsafe {
+    unsafe{
         *ti = TaskInfo{
-            status:TaskStatus::Running,
+            status:get_current_status(),
             syscall_times:get_syscall_times(),
-            time:get_already_run_time()
-        }
+            time : get_already_run_time()/1000
+
+        };
     }
     0
 }

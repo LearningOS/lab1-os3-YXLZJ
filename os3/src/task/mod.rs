@@ -161,6 +161,18 @@ impl TaskManager {
         let current = inner.current_task;
         get_time_us() - inner.tasks[current].start_time
     }
+
+    fn get_current_TaskControlBlock_start_time(&self)->usize{
+        let inner = self.inner.exclusive_access();
+        let current = inner.current_task;
+        inner.tasks[current].start_time
+    }
+
+    fn get_current_status(&self)->TaskStatus{
+        let inner = self.inner.exclusive_access();
+        let current = inner.current_task;
+        inner.tasks[current].task_status
+    }
     // LAB1: Try to implement your function to update or get task info!
 }
 
@@ -207,4 +219,11 @@ pub fn get_syscall_times()->[u32;MAX_SYSCALL_NUM]{
 
 pub fn get_already_run_time() ->usize{
     TASK_MANAGER.get_already_run_time()
+}
+
+pub fn get_current_start_time()->usize{
+    TASK_MANAGER.get_current_TaskControlBlock_start_time()
+}
+pub fn get_current_status()->TaskStatus{
+    TASK_MANAGER.get_current_status()
 }
